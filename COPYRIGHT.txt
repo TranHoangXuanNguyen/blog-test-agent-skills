@@ -1,0 +1,4 @@
+Copyright (c) 2026 Tran Hoang Xuan Nguyen. All rights reserved.
+
+Danh sách tác phẩm/bài viết được bảo hộ tác quyền:
+- [27 Th5, 2026] Bài viết ID 5: "Hướng dẫn Deploy React lên GitHub Pages" (Chuyên mục: Performance) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.

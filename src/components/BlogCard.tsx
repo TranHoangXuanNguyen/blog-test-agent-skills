@@ -63,7 +63,16 @@ const BlogCard = ({ post }: { post: Post }) => {
 
 // Mock data for demonstration
 export const mockPosts: Post[] = [
-    {
+      {
+    id: 5,
+    title: "Hướng dẫn Deploy React lên GitHub Pages",
+    excerpt: "Học cách deploy ứng dụng của bạn trong 5 phút.",
+    date: "27 Th5, 2026",
+    readTime: "5 phút đọc",
+    imageUrl: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&auto=format&fit=crop&q=60",
+    category: "Performance"
+  },
+{
     id: 4,
     title: "Học Next.js 14 toàn tập",
     excerpt: "Hướng dẫn chi tiết cách tự xây dựng một ứng dụng Next.js từ đầu.",
@@ -99,6 +108,7 @@ export const mockPosts: Post[] = [
     imageUrl: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&auto=format&fit=crop&q=60",
     category: "Performance"
   }
+
 
 ];
 
