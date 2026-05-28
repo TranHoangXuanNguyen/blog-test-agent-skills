@@ -3,7 +3,64 @@
  * Bản quyền thuộc về dự án MyBlog. Vui lòng không sao chép trái phép.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
+import { Check, Copy } from 'lucide-react';
+
+interface CodeBlockProps {
+  code: string;
+  language?: string;
+}
+
+const CodeBlock = ({ code, language }: CodeBlockProps) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy code: ', err);
+    }
+  };
+
+  return (
+    <div className="relative rounded-2xl overflow-hidden border border-gray-200 dark:border-slate-800/80 bg-slate-900 shadow-md my-6 text-left">
+      {/* Top window control bar (Mac style) */}
+      <div className="flex items-center justify-between px-4 py-3 bg-slate-950/80 border-b border-slate-850/30">
+        <div className="flex items-center gap-6">
+          <div className="flex gap-1.5">
+            <span className="w-3 h-3 rounded-full bg-rose-500/80" />
+            <span className="w-3 h-3 rounded-full bg-amber-500/80" />
+            <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
+          </div>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">
+            {language || 'code'}
+          </span>
+        </div>
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer text-xs font-bold font-sans"
+        >
+          {copied ? (
+            <>
+              <Check size={12} className="text-emerald-450" />
+              Copied!
+            </>
+          ) : (
+            <>
+              <Copy size={12} />
+              Copy
+            </>
+          )}
+        </button>
+      </div>
+      <pre className="p-4 overflow-x-auto font-mono text-sm text-slate-200 bg-slate-900 leading-relaxed select-text">
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+};
 
 interface MarkdownRendererProps {
   content: string;
@@ -16,24 +73,35 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
   let currentKey = 0;
   const nextKey = () => `md-${currentKey++}`;
 
+  // Hàm chuyển đổi tiêu đề thành ID slug liên kết
+  const slugify = (text: string) => {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Bỏ dấu tiếng Việt
+      .replace(/đ/g, 'd')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+  };
+
   // Helper for inline rendering (bold, link, inline-code, image)
   const renderInline = (text: string): React.ReactNode => {
     // 1. Detect image: ![alt](url)
     const imgRegex = /!\[(.*?)\]\((.*?)\)/g;
     const imgMatch = [...text.matchAll(imgRegex)];
     if (imgMatch.length > 0) {
-      // For simplicity, if there is an image in the line, render it as a block image
       const [, alt, url] = imgMatch[0];
       return (
         <span key={nextKey()} className="block my-6">
           <img
             src={url}
             alt={alt}
-            className="w-full h-auto max-h-[450px] object-cover rounded-xl shadow-md border border-gray-100 dark:border-gray-800"
+            className="w-full h-auto max-h-[450px] object-cover rounded-2xl shadow-md border border-gray-100 dark:border-gray-800"
             loading="lazy"
           />
           {alt && (
-            <span className="block text-center text-xs text-gray-500 mt-2 italic dark:text-gray-400">
+            <span className="block text-center text-xs text-gray-500 mt-2.5 italic dark:text-gray-400">
               {alt}
             </span>
           )}
@@ -45,7 +113,6 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
     const tokens: React.ReactNode[] = [];
     let lastIndex = 0;
     
-    // Combined regex for link: [text](url), bold: **text**, code: `code`
     const inlineRegex = /(\*\*.*?\*\*|\[.*?\]\(.*?\)|`.*?`)/g;
     const matches = [...text.matchAll(inlineRegex)];
 
@@ -57,13 +124,11 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
       const matchText = match[0];
       const matchIndex = match.index ?? 0;
 
-      // Add text before match
       if (matchIndex > lastIndex) {
         tokens.push(text.slice(lastIndex, matchIndex));
       }
 
       if (matchText.startsWith('**') && matchText.endsWith('**')) {
-        // Bold text
         const boldContent = matchText.slice(2, -2);
         tokens.push(
           <strong key={`bold-${idx}`} className="font-bold text-gray-950 dark:text-white">
@@ -71,7 +136,6 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
           </strong>
         );
       } else if (matchText.startsWith('[') && matchText.includes('](')) {
-        // Link
         const closeBracketIdx = matchText.indexOf(']');
         const linkText = matchText.slice(1, closeBracketIdx);
         const linkUrl = matchText.slice(closeBracketIdx + 2, -1);
@@ -79,7 +143,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
           <a
             key={`link-${idx}`}
             href={linkUrl}
-            className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
+            className="font-bold text-indigo-600 dark:text-indigo-400 hover:underline hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -87,12 +151,11 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
           </a>
         );
       } else if (matchText.startsWith('`') && matchText.endsWith('`')) {
-        // Inline code
         const codeContent = matchText.slice(1, -1);
         tokens.push(
           <code
             key={`code-${idx}`}
-            className="px-1.5 py-0.5 rounded font-mono text-sm bg-gray-100 text-indigo-600 dark:bg-gray-800 dark:text-indigo-400"
+            className="px-1.5 py-0.5 rounded font-mono text-sm bg-gray-150 text-indigo-650 dark:bg-slate-800 dark:text-indigo-300 font-medium"
           >
             {codeContent}
           </code>
@@ -115,7 +178,6 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
     const line = lines[i];
     const trimmedLine = line.trim();
 
-    // 1. Skip empty lines
     if (!trimmedLine) {
       i++;
       continue;
@@ -124,7 +186,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
     // 2. Code Block
     if (trimmedLine.startsWith('```')) {
       const lang = trimmedLine.slice(3).trim();
-      let codeLines: string[] = [];
+      const codeLines: string[] = [];
       i++;
       while (i < lines.length && !lines[i].trim().startsWith('```')) {
         codeLines.push(lines[i]);
@@ -133,16 +195,8 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
       i++; // skip closing ```
       const codeText = codeLines.join('\n');
       elements.push(
-        <section key={nextKey()} className="my-6">
-          <pre className="p-4 rounded-xl overflow-x-auto font-mono text-sm bg-gray-900 text-gray-100 dark:bg-gray-950 dark:text-gray-300 border border-gray-800">
-            {lang && (
-              <div className="text-xs text-gray-500 dark:text-gray-400 font-sans mb-2 border-b border-gray-800 pb-2 flex justify-between uppercase">
-                <span>{lang}</span>
-                <span>Code Example</span>
-              </div>
-            )}
-            <code>{codeText}</code>
-          </pre>
+        <section key={nextKey()} className="my-6 text-left">
+          <CodeBlock code={codeText} language={lang} />
         </section>
       );
       continue;
@@ -150,13 +204,12 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
     // 3. Table
     if (trimmedLine.startsWith('|')) {
-      let tableLines: string[] = [];
+      const tableLines: string[] = [];
       while (i < lines.length && lines[i].trim().startsWith('|')) {
         tableLines.push(lines[i].trim());
         i++;
       }
 
-      // Filter divider lines like |---|---|
       const rows = tableLines
         .map(rowLine => rowLine.split('|').map(cell => cell.trim()).filter((_, idx, arr) => idx > 0 && idx < arr.length - 1))
         .filter(row => !row.every(cell => cell.startsWith('-')));
@@ -165,25 +218,25 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
         const headers = rows[0];
         const bodyRows = rows.slice(1);
         elements.push(
-          <section key={nextKey()} className="overflow-x-auto my-8 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800 text-sm">
-              <thead className="bg-gray-50 dark:bg-gray-900">
+          <section key={nextKey()} className="overflow-x-auto my-8 border border-gray-150 dark:border-slate-800/80 rounded-2xl shadow-sm bg-white dark:bg-slate-900">
+            <table className="min-w-full divide-y divide-gray-150 dark:divide-slate-800 text-sm">
+              <thead className="bg-gray-50/70 dark:bg-slate-900/80">
                 <tr>
                   {headers.map((h, idx) => (
                     <th
                       key={`th-${idx}`}
-                      className="px-6 py-3 text-left font-bold text-gray-950 dark:text-white uppercase tracking-wider"
+                      className="px-6 py-3.5 text-left font-bold text-gray-900 dark:text-white uppercase tracking-wider"
                     >
                       {renderInline(h)}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-gray-950 divide-y divide-gray-200 dark:divide-gray-800">
+              <tbody className="bg-transparent divide-y divide-gray-100 dark:divide-slate-850">
                 {bodyRows.map((r, rowIdx) => (
-                  <tr key={`tr-${rowIdx}`} className="hover:bg-gray-50/50 dark:hover:bg-gray-900/30 transition-colors">
+                  <tr key={`tr-${rowIdx}`} className="hover:bg-gray-50/40 dark:hover:bg-slate-850/20 transition-colors">
                     {r.map((c, colIdx) => (
-                      <td key={`td-${rowIdx}-${colIdx}`} className="px-6 py-4 text-gray-700 dark:text-gray-300 whitespace-pre-line">
+                      <td key={`td-${rowIdx}-${colIdx}`} className="px-6 py-4 text-gray-700 dark:text-gray-305 whitespace-pre-line leading-relaxed">
                         {renderInline(c)}
                       </td>
                     ))}
@@ -197,20 +250,32 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
       continue;
     }
 
-    // 4. Headings
+    // 4. Headings (Added ID slugs for Table of Contents scrolling)
     if (trimmedLine.startsWith('## ')) {
+      const headingText = trimmedLine.slice(3);
+      const id = slugify(headingText);
       elements.push(
-        <h2 key={nextKey()} className="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4 tracking-tight border-b border-gray-100 dark:border-gray-800 pb-2">
-          {renderInline(trimmedLine.slice(3))}
+        <h2 
+          key={nextKey()} 
+          id={id}
+          className="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4 tracking-tight border-b border-gray-100 dark:border-slate-850 pb-2 scroll-mt-20"
+        >
+          {renderInline(headingText)}
         </h2>
       );
       i++;
       continue;
     }
     if (trimmedLine.startsWith('### ')) {
+      const headingText = trimmedLine.slice(4);
+      const id = slugify(headingText);
       elements.push(
-        <h3 key={nextKey()} className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-3 tracking-tight">
-          {renderInline(trimmedLine.slice(4))}
+        <h3 
+          key={nextKey()} 
+          id={id}
+          className="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-3 tracking-tight scroll-mt-20"
+        >
+          {renderInline(headingText)}
         </h3>
       );
       i++;
@@ -218,7 +283,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
     }
     if (trimmedLine.startsWith('#### ')) {
       elements.push(
-        <h4 key={nextKey()} className="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">
+        <h4 key={nextKey()} className="text-lg font-bold text-gray-800 dark:text-gray-205 mt-6 mb-2">
           {renderInline(trimmedLine.slice(5))}
         </h4>
       );
@@ -228,9 +293,8 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
     // 5. Blockquote
     if (trimmedLine.startsWith('>')) {
-      let quoteLines: string[] = [];
+      const quoteLines: string[] = [];
       while (i < lines.length && lines[i].trim().startsWith('>')) {
-        // Strip out the leading '>' and space
         let quoteLine = lines[i].trim().slice(1);
         if (quoteLine.startsWith(' ')) {
           quoteLine = quoteLine.slice(1);
@@ -241,7 +305,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
       const quoteText = quoteLines.join('\n');
       elements.push(
         <section key={nextKey()} className="my-6">
-          <blockquote className="border-l-4 border-indigo-600 bg-indigo-50/40 dark:bg-indigo-950/10 px-6 py-4 rounded-r-xl italic text-gray-800 dark:text-gray-300">
+          <blockquote className="border-l-4 border-indigo-650 bg-indigo-50/20 dark:bg-indigo-950/10 px-6 py-4.5 rounded-r-2xl italic text-gray-800 dark:text-gray-300 leading-relaxed">
             {renderInline(quoteText)}
           </blockquote>
         </section>
@@ -251,7 +315,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
     // 6. Unordered List
     if (trimmedLine.startsWith('- ') || trimmedLine.startsWith('* ')) {
-      let listItems: string[] = [];
+      const listItems: string[] = [];
       while (
         i < lines.length &&
         (lines[i].trim().startsWith('- ') || lines[i].trim().startsWith('* '))
@@ -260,8 +324,8 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
         i++;
       }
       elements.push(
-        <section key={nextKey()} className="my-4">
-          <ul className="list-disc pl-6 space-y-2 text-gray-700 dark:text-gray-300">
+        <section key={nextKey()} className="my-4 pl-2">
+          <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
             {listItems.map((item, idx) => (
               <li key={`li-u-${idx}`}>{renderInline(item)}</li>
             ))}
@@ -273,7 +337,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
     // 7. Ordered List
     if (/^\d+\.\s/.test(trimmedLine)) {
-      let listItems: string[] = [];
+      const listItems: string[] = [];
       while (i < lines.length && /^\d+\.\s/.test(lines[i].trim())) {
         const itemLine = lines[i].trim();
         const dotIndex = itemLine.indexOf('.');
@@ -281,8 +345,8 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
         i++;
       }
       elements.push(
-        <section key={nextKey()} className="my-4">
-          <ol className="list-decimal pl-6 space-y-2 text-gray-700 dark:text-gray-300">
+        <section key={nextKey()} className="my-4 pl-2">
+          <ol className="list-decimal pl-5 space-y-2 text-gray-700 dark:text-gray-300">
             {listItems.map((item, idx) => (
               <li key={`li-o-${idx}`}>{renderInline(item)}</li>
             ))}
@@ -294,14 +358,14 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
     // 8. Horizontal Rule
     if (trimmedLine === '---' || trimmedLine === '***') {
-      elements.push(<hr key={nextKey()} className="my-8 border-t border-gray-200 dark:border-gray-800" />);
+      elements.push(<hr key={nextKey()} className="my-10 border-t border-gray-150 dark:border-slate-850" />);
       i++;
       continue;
     }
 
     // 9. Standard Paragraph
     elements.push(
-      <p key={nextKey()} className="mb-5 text-gray-700 dark:text-gray-300 leading-relaxed text-base md:text-lg">
+      <p key={nextKey()} className="mb-6 text-gray-700 dark:text-gray-300 leading-relaxed text-base md:text-lg">
         {renderInline(trimmedLine)}
       </p>
     );

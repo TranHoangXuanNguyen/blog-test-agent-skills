@@ -3,3 +3,11 @@ Copyright (c) 2026 Tran Hoang Xuan Nguyen. All rights reserved.
 Danh sách tác phẩm/bài viết được bảo hộ tác quyền:
 - [28 Th5, 2026] Bài viết ID 1: "Agents, Instructions, Skills" (Chuyên mục: AI & Technology) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
 - [28 Th5, 2026] Bài viết ID 2: "Agentic AI vs Assistant AI" (Chuyên mục: AI & Technology) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
+- [28 Th5, 2026] Bài viết ID 3: "Stop Using useEffect for Data Fetching: Understanding TanStack Query" (Chuyên mục: React) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
+- [28 Th5, 2026] Bài viết ID 4: "Hướng dẫn học React cho người mới bắt đầu" (Chuyên mục: Development) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
+- [28 Th5, 2026] Bài viết ID 5: "Tại sao Tailwind CSS lại thay đổi cách chúng ta viết CSS" (Chuyên mục: Design) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
+- [28 Th5, 2026] Bài viết ID 6: "Tối ưu hóa hiệu suất ứng dụng Web với Vite v4" (Chuyên mục: Performance) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
+- [28 Th5, 2026] Bài viết ID 7: "Học Next.js 14 toàn tập" (Chuyên mục: Development) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
+- [28 Th5, 2026] Bài viết ID 8: "Hướng dẫn Deploy React lên GitHub Pages" (Chuyên mục: Performance) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
+- [28 Th5, 2026] Bài viết ID 9: "Top 7 Featured DEV Posts of the Week" (Chuyên mục: Top7) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
+- [28 Th5, 2026] Bài viết ID 10: "How the 80/20 Rule and GitHub Copilot Saved My Abandoned App From Code Graveyard" (Chuyên mục: Devchallenge) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.

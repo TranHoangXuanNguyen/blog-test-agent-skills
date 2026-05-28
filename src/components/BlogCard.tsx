@@ -1,9 +1,4 @@
-/**
- * Copyright (c) 2026 MyBlog. All rights reserved.
- * Bản quyền thuộc về dự án MyBlog. Vui lòng không sao chép trái phép.
- */
-
-import { Calendar, Clock, ChevronRight } from 'lucide-react';
+import { Calendar, Clock, ArrowRight } from 'lucide-react';
 import type { Post } from '../data/posts';
 
 interface BlogCardProps {
@@ -20,50 +15,55 @@ const BlogCard = ({ post, onSelectPost }: BlogCardProps) => {
   };
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all hover:shadow-xl">
+    <article 
+      onClick={handleClick}
+      className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100/85 dark:border-slate-850/80 bg-white/70 dark:bg-slate-900/40 backdrop-blur-sm transition-all duration-350 hover:shadow-xl dark:hover:shadow-indigo-950/10 hover:-translate-y-1.5 cursor-pointer glow-border"
+    >
       {/* Image Container */}
-      <div className="aspect-video w-full overflow-hidden">
+      <div className="aspect-video w-full overflow-hidden bg-gray-100 dark:bg-slate-800 relative">
         <img
           src={post.imageUrl}
           alt={post.title}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           loading="lazy"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col p-6">
-        <div className="mb-3">
-          <span className="inline-block rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
+      <div className="flex flex-1 flex-col p-6 text-left">
+        <div className="mb-3.5 flex items-center justify-between">
+          <span className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-100/10 px-2.5 py-1 text-xs font-bold text-indigo-600 dark:text-indigo-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-indigo-400 animate-pulse" />
             {post.category}
           </span>
         </div>
 
-        <h3 className="mb-2 text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+        <h3 className="mb-3 text-lg font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors leading-snug">
           <a href="#" onClick={handleClick}>{post.title}</a>
         </h3>
 
-        <p className="mb-4 text-sm text-gray-600 line-clamp-3">
+        <p className="mb-5 text-sm text-gray-500 dark:text-gray-400 line-clamp-3 leading-relaxed">
           {post.excerpt}
         </p>
 
         {/* Meta Info */}
-        <div className="mt-auto flex items-center justify-between border-t pt-4 text-xs text-gray-500">
-          <div className="flex items-center gap-4">
+        <div className="mt-auto flex items-center justify-between border-t border-gray-100 dark:border-slate-800/80 pt-4 text-xs text-gray-400 dark:text-gray-500">
+          <div className="flex items-center gap-3">
             <span className="flex items-center gap-1">
-              <Calendar size={14} />
+              <Calendar size={13} />
               {post.date}
             </span>
             <span className="flex items-center gap-1">
-              <Clock size={14} />
+              <Clock size={13} />
               {post.readTime}
             </span>
           </div>
           
-          <a href="#" onClick={handleClick} className="flex items-center gap-1 font-semibold text-indigo-600 hover:text-indigo-700">
+          <span className="flex items-center gap-1 font-bold text-indigo-650 dark:text-indigo-400 group-hover:text-indigo-755 dark:group-hover:text-indigo-300 transition-colors">
             Đọc tiếp
-            <ChevronRight size={16} />
-          </a>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          </span>
         </div>
       </div>
     </article>

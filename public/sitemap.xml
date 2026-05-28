@@ -7,6 +7,55 @@
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+  <!-- Bài viết ID 9 -->
+  <url>
+    <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=9</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Bài viết ID 8 -->
+  <url>
+    <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=8</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Bài viết ID 7 -->
+  <url>
+    <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=7</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Bài viết ID 6 -->
+  <url>
+    <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=6</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Bài viết ID 5 -->
+  <url>
+    <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=5</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Bài viết ID 4 -->
+  <url>
+    <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=4</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Bài viết ID 3 -->
+  <url>
+    <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=3</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- Bài viết ID 1 -->
   <url>
     <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=1</loc>

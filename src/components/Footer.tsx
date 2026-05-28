@@ -1,9 +1,5 @@
-/**
- * Copyright (c) 2026 MyBlog. All rights reserved.
- * Bản quyền thuộc về dự án MyBlog. Vui lòng không sao chép trái phép.
- */
-
-import { Mail } from 'lucide-react';
+import { Mail, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
 
 const Github = ({ size = 20 }: { size?: number }) => (
   <svg
@@ -58,6 +54,17 @@ const Linkedin = ({ size = 20 }: { size?: number }) => (
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState('');
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email.trim()) {
+      setIsSubscribed(true);
+      setEmail('');
+      setTimeout(() => setIsSubscribed(false), 3000);
+    }
+  };
 
   const footerLinks = [
     {
@@ -90,27 +97,29 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="w-full border-t bg-white dark:bg-gray-950 text-gray-600 dark:text-gray-400">
-      <div className="container mx-auto px-4 py-12 md:py-16">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+    <footer className="w-full border-t border-gray-100 dark:border-gray-900 bg-white dark:bg-gray-950 text-gray-600 dark:text-gray-400 transition-all duration-300">
+      <div className="container mx-auto px-4 py-12 md:py-16 max-w-7xl">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5 text-left">
           {/* Brand section */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-indigo-600"></div>
-              <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">MyBlog</span>
+            <div className="flex items-center gap-2.5">
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-650 to-violet-500 shadow-md shadow-indigo-500/10 flex items-center justify-center">
+                <span className="text-white font-extrabold text-sm">MB</span>
+              </div>
+              <span className="text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">MyBlog</span>
             </div>
-            <p className="max-w-xs text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+            <p className="max-w-xs text-sm leading-relaxed text-gray-550 dark:text-gray-400">
               Nơi chia sẻ kiến thức công nghệ, lập trình frontend, backend và những trải nghiệm thực tế trong ngành phát triển phần mềm.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-indigo-600 dark:hover:bg-gray-800 transition-colors" aria-label="Github">
-                <Github size={20} />
+            <div className="flex gap-2">
+              <a href="#" className="rounded-xl p-2.5 text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-900 hover:text-indigo-650 dark:hover:text-indigo-400 transition-all" aria-label="Github">
+                <Github size={18} />
               </a>
-              <a href="#" className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-indigo-600 dark:hover:bg-gray-800 transition-colors" aria-label="Twitter">
-                <Twitter size={20} />
+              <a href="#" className="rounded-xl p-2.5 text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-900 hover:text-indigo-650 dark:hover:text-indigo-400 transition-all" aria-label="Twitter">
+                <Twitter size={18} />
               </a>
-              <a href="#" className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-indigo-600 dark:hover:bg-gray-800 transition-colors" aria-label="LinkedIn">
-                <Linkedin size={20} />
+              <a href="#" className="rounded-xl p-2.5 text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-900 hover:text-indigo-650 dark:hover:text-indigo-400 transition-all" aria-label="LinkedIn">
+                <Linkedin size={18} />
               </a>
             </div>
           </div>
@@ -118,15 +127,15 @@ const Footer = () => {
           {/* Links sections */}
           {footerLinks.map((group) => (
             <div key={group.title} className="space-y-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900 dark:text-white">
                 {group.title}
               </h3>
-              <ul className="space-y-2.5">
+              <ul className="space-y-3">
                 {group.links.map((link) => (
                   <li key={link.name}>
                     <a
                       href={link.href}
-                      className="text-sm text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors"
+                      className="text-sm text-gray-500 dark:text-gray-400 hover:text-indigo-650 dark:hover:text-indigo-400 transition-all duration-200"
                     >
                       {link.name}
                     </a>
@@ -138,42 +147,54 @@ const Footer = () => {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="mt-12 border-t border-gray-100 dark:border-gray-800 pt-8 md:flex md:items-center md:justify-between">
+        <div className="mt-12 border-t border-gray-100 dark:border-gray-900 pt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 text-left">
           <div className="max-w-md space-y-2">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-white">
               Đăng ký nhận bài viết mới
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-gray-550 dark:text-gray-400 leading-relaxed">
               Nhận thông báo về các bài viết công nghệ mới nhất hàng tuần trực tiếp trong hộp thư của bạn.
             </p>
           </div>
-          <form className="mt-4 md:mt-0 flex w-full max-w-md gap-2" onSubmit={(e) => e.preventDefault()}>
-            <div className="relative flex-grow">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-              <input
-                type="email"
-                required
-                placeholder="Email của bạn..."
-                className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 py-2.5 pl-10 pr-4 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
-              />
-            </div>
-            <button
-              type="submit"
-              className="rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all cursor-pointer"
-            >
-              Đăng ký
-            </button>
-          </form>
+          
+          <div className="w-full max-w-md relative">
+            {isSubscribed ? (
+              <div className="flex items-center gap-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100/10 px-4 py-3 text-xs font-bold text-emerald-600 dark:text-emerald-500 animate-in fade-in duration-300">
+                <CheckCircle2 size={16} />
+                <span>Đăng ký thành công! Hãy check email hàng tuần nhé.</span>
+              </div>
+            ) : (
+              <form className="flex w-full gap-2" onSubmit={handleSubscribe}>
+                <div className="relative flex-grow">
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-450 dark:text-gray-500" size={16} />
+                  <input
+                    type="email"
+                    required
+                    placeholder="Email của bạn..."
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full rounded-xl border border-gray-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 py-3 pl-11 pr-4 text-sm text-gray-950 dark:text-white placeholder-gray-400 focus:border-indigo-500 dark:focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="rounded-xl bg-indigo-650 dark:bg-indigo-550 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-indigo-500/10 hover:bg-indigo-700 dark:hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-550 focus:ring-offset-2 transition-all cursor-pointer active:scale-98"
+                >
+                  Đăng ký
+                </button>
+              </form>
+            )}
+          </div>
         </div>
 
         {/* Bottom footer */}
-        <div className="mt-12 border-t border-gray-100 dark:border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-400 dark:text-gray-500">
+        <div className="mt-12 border-t border-gray-100 dark:border-gray-900 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-gray-455 dark:text-gray-500">
             &copy; {currentYear} MyBlog. Tất cả các quyền được bảo lưu.
           </p>
-          <div className="flex gap-6 text-xs text-gray-400 dark:text-gray-500">
-            <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Điều khoản dịch vụ</a>
-            <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Chính sách Cookie</a>
+          <div className="flex gap-6 text-xs text-gray-455 dark:text-gray-500">
+            <a href="#" className="hover:text-indigo-650 dark:hover:text-indigo-400">Điều khoản dịch vụ</a>
+            <a href="#" className="hover:text-indigo-650 dark:hover:text-indigo-400">Chính sách Cookie</a>
           </div>
         </div>
       </div>
