@@ -7,6 +7,13 @@
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+  <!-- Bài viết ID 9 -->
+  <url>
+    <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=9</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- Bài viết ID 8 -->
   <url>
     <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=8</loc>
