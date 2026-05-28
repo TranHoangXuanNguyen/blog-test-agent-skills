@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sơ đồ trang web chính thức
+Sitemap: https://tranhoangxuannguyen.github.io/blog-test-agent-skills/sitemap.xml

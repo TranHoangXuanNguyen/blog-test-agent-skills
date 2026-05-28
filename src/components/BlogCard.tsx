@@ -1,16 +1,24 @@
-import { Calendar, Clock, ChevronRight } from 'lucide-react';
+/**
+ * Copyright (c) 2026 MyBlog. All rights reserved.
+ * Bản quyền thuộc về dự án MyBlog. Vui lòng không sao chép trái phép.
+ */
 
-export interface Post {
-  id: number;
-  title: string;
-  excerpt: string;
-  date: string;
-  readTime: string;
-  imageUrl: string;
-  category: string;
+import { Calendar, Clock, ChevronRight } from 'lucide-react';
+import type { Post } from '../data/posts';
+
+interface BlogCardProps {
+  post: Post;
+  onSelectPost?: (id: number) => void;
 }
 
-const BlogCard = ({ post }: { post: Post }) => {
+const BlogCard = ({ post, onSelectPost }: BlogCardProps) => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onSelectPost) {
+      onSelectPost(post.id);
+    }
+  };
+
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all hover:shadow-xl">
       {/* Image Container */}
@@ -19,6 +27,7 @@ const BlogCard = ({ post }: { post: Post }) => {
           src={post.imageUrl}
           alt={post.title}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
         />
       </div>
 
@@ -31,7 +40,7 @@ const BlogCard = ({ post }: { post: Post }) => {
         </div>
 
         <h3 className="mb-2 text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-indigo-600 transition-colors">
-          <a href="#">{post.title}</a>
+          <a href="#" onClick={handleClick}>{post.title}</a>
         </h3>
 
         <p className="mb-4 text-sm text-gray-600 line-clamp-3">
@@ -51,7 +60,7 @@ const BlogCard = ({ post }: { post: Post }) => {
             </span>
           </div>
           
-          <a href="#" className="flex items-center gap-1 font-semibold text-indigo-600 hover:text-indigo-700">
+          <a href="#" onClick={handleClick} className="flex items-center gap-1 font-semibold text-indigo-600 hover:text-indigo-700">
             Đọc tiếp
             <ChevronRight size={16} />
           </a>
@@ -60,56 +69,5 @@ const BlogCard = ({ post }: { post: Post }) => {
     </article>
   );
 };
-
-// Mock data for demonstration
-export const mockPosts: Post[] = [
-      {
-    id: 5,
-    title: "Hướng dẫn Deploy React lên GitHub Pages",
-    excerpt: "Học cách deploy ứng dụng của bạn trong 5 phút.",
-    date: "27 Th5, 2026",
-    readTime: "5 phút đọc",
-    imageUrl: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&auto=format&fit=crop&q=60",
-    category: "Performance"
-  },
-{
-    id: 4,
-    title: "Học Next.js 14 toàn tập",
-    excerpt: "Hướng dẫn chi tiết cách tự xây dựng một ứng dụng Next.js từ đầu.",
-    date: "27 Th5, 2026",
-    readTime: "15 phút đọc",
-    imageUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=60",
-    category: "Development"
-  },
-{
-    id: 1,
-    title: "Hướng dẫn học React cho người mới bắt đầu",
-    excerpt: "Tìm hiểu các khái niệm cơ bản của React như Components, Hooks và Props thông qua các ví dụ thực tế cực kỳ dễ hiểu.",
-    date: "24 Th5, 2026",
-    readTime: "5 phút đọc",
-    imageUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=60",
-    category: "Development"
-  },
-  {
-    id: 2,
-    title: "Tại sao Tailwind CSS lại thay đổi cách chúng ta viết CSS?",
-    excerpt: "Utility-first CSS không chỉ là một xu hướng, nó là một cuộc cách mạng trong việc xây dựng giao diện nhanh chóng và nhất quán.",
-    date: "22 Th5, 2026",
-    readTime: "8 phút đọc",
-    imageUrl: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=800&auto=format&fit=crop&q=60",
-    category: "Design"
-  },
-  {
-    id: 3,
-    title: "Tối ưu hóa hiệu suất ứng dụng Web với Vite v4",
-    excerpt: "Khám phá những tính năng mới nhất của Vite và cách cấu hình dự án để đạt tốc độ tải trang nhanh nhất có thể.",
-    date: "20 Th5, 2026",
-    readTime: "10 phút đọc",
-    imageUrl: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&auto=format&fit=crop&q=60",
-    category: "Performance"
-  }
-
-
-];
 
 export default BlogCard;

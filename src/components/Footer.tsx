@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 MyBlog. All rights reserved.
+ * Bản quyền thuộc về dự án MyBlog. Vui lòng không sao chép trái phép.
+ */
+
 import { Mail } from 'lucide-react';
 
 const Github = ({ size = 20 }: { size?: number }) => (

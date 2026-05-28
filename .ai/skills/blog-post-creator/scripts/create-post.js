@@ -81,7 +81,7 @@ try {
 
   // Xử lý tệp COPYRIGHT.txt ở thư mục gốc
   const copyrightFile = path.join(process.cwd(), 'COPYRIGHT.txt');
-  const copyrightHeader = `Copyright (c) ${dateObj.getFullYear()} MyBlog. All rights reserved.\n\nDanh sách tác phẩm/bài viết được bảo hộ tác quyền:\n`;
+  const copyrightHeader = `Copyright (c) ${dateObj.getFullYear()} Tran Hoang Xuan Nguyen. All rights reserved.\n\nDanh sách tác phẩm/bài viết được bảo hộ tác quyền:\n`;
   let copyrightContent = '';
 
   if (fs.existsSync(copyrightFile)) {
@@ -90,7 +90,7 @@ try {
     copyrightContent = copyrightHeader;
   }
 
-  const entry = `- [${formattedDate}] Bài viết ID ${nextId}: "${title}" (Chuyên mục: ${category}) - Tác quyền sở hữu bởi MyBlog.`;
+  const entry = `- [${formattedDate}] Bài viết ID ${nextId}: "${title}" (Chuyên mục: ${category}) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.`;
   if (!copyrightContent.includes(entry)) {
     // Đảm bảo có dòng mới trước khi append
     if (!copyrightContent.endsWith('\n')) {

@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2026 MyBlog. All rights reserved.
+ * Bản quyền thuộc về dự án MyBlog. Vui lòng không sao chép trái phép.
+ */
+
 import { useState } from 'react';
 import { Menu, Search, X } from 'lucide-react';
 
