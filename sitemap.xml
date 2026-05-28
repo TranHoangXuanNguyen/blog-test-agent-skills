@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Trang chủ -->
+  <url>
+    <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <!-- Bài viết ID 1 -->
+  <url>
+    <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=1</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- Bài viết ID 2 -->
+  <url>
+    <loc>https://tranhoangxuannguyen.github.io/blog-test-agent-skills/?post=2</loc>
+    <lastmod>2026-05-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

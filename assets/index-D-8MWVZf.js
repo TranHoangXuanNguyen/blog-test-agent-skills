@@ -79,8 +79,8 @@ The true power of modern AI development lies in combining all three layers:
 
 > **Example Workflow:**
 > 
-> A **"DevOps Agent"** will strictly follow the repository's Global **Instruction** to _"always run unit tests before deploying,"_ and when ready, it will automatically pull out the _"deploy-to-aws"_ **Skill** from its toolkit to execute the actual infrastructure update.`},{id:2,title:`Agentic AI vs Assistant AI`,excerpt:`So sánh chi tiết giữa Assistant AI (Trợ lý phản hồi tuyến tính) và Agentic AI (Tác nhân tự hoạt động, thực thi mục tiêu và tự sửa lỗi).`,date:`28 Th5, 2026`,readTime:`10 phút đọc`,imageUrl:`https://images.unsplash.com/photo-1677442136019-21780efad99a?w=800&auto=format&fit=crop&q=60`,category:`AI & Technology`,content:`### Agentic AI
-#### Definition:
+> A **"DevOps Agent"** will strictly follow the repository's Global **Instruction** to _"always run unit tests before deploying,"_ and when ready, it will automatically pull out the _"deploy-to-aws"_ **Skill** from its toolkit to execute the actual infrastructure update.`},{id:2,title:`Agentic AI vs Assistant AI`,excerpt:`So sánh chi tiết giữa Assistant AI (Trợ lý phản hồi tuyến tính) và Agentic AI (Tác nhân tự hoạt động, thực thi mục tiêu và tự sửa lỗi).`,date:`28 Th5, 2026`,readTime:`10 phút đọc`,imageUrl:`https://images.unsplash.com/photo-1677442136019-21780efad99a?w=800&auto=format&fit=crop&q=60`,category:`AI & Technology`,content:`## Agentic AI
+### Definition:
 - Agentic AI is a type of AI system that can autonomously make decisions, plan actions, and execute tasks to achieve specific goals with minimal human intervention. It focuses on goal-driven behavior, reasoning, and interaction with tools and environments.
     - **Comparison with Generative AI:**
         - **Generative AI:** Focuses on creating content (text, image, audio) based on user input (reactive).
@@ -89,7 +89,7 @@ The true power of modern AI development lies in combining all three layers:
 ![ReAct Loop Workflow](https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=60)
 
 ---
-#### How Agentic AI Works: The ReAct Loop (Reasoning + Acting)
+### How Agentic AI Works: The ReAct Loop (Reasoning + Acting)
 
 Every agentic system runs some version of the same loop. The specifics differ — what model, what tools, what memory — but the shape is consistent. This loop is what separates agents from typical chatbots.
 
@@ -101,14 +101,14 @@ Every agentic system runs some version of the same loop. The specifics differ �
     Read the result. Update memory. Detect errors. Decide whether to continue, retry, change strategy, or finish.
 
 ---
-#### Advantages
+### Advantages
 
 - Works independently with minimal human input.
 - Learns and adjusts to changing conditions.
 - Handles diverse and complex tasks.
 - Supports coordination across multiple agents or systems.
 
-#### Limitations
+### Limitations
 
 - Needs monitoring to avoid errors or risks.
 - Raises concerns about responsibility for actions.
@@ -117,8 +117,8 @@ Every agentic system runs some version of the same loop. The specifics differ �
 
 ---
 
-### Assistant AI
-#### Definition:
+## Assistant AI
+### Definition:
 
 - An **AI Assistant** is an intelligent application built on top of foundation models (or LLMs) that uses conversational AI to understand natural language commands and complete tasks for a user. It is strictly **reactive**, meaning it operates on a prompt-response model and awaits continuous human instructions rather than autonomously pursuing long-term goals.
     - **Comparison with AI Agent (According to IBM):**
@@ -126,7 +126,7 @@ Every agentic system runs some version of the same loop. The specifics differ �
         - **AI Agent:** Taking initiative. It can operate independently after an initial kickoff prompt, designing its own workflow and autonomously deciding when to use external tools.
 - **_Example:_** When you ask, “Write a short poem about a sunny day,” or “Summarize the main points of the French Revolution.”
 ---
-#### How Assistant AI Works: Prompt-Response Model
+### How Assistant AI Works: Prompt-Response Model
 
 Assistant AI typically operates on a prompt-response model, where it processes user input and generates an output based on its learned patterns and knowledge.
 
@@ -139,14 +139,14 @@ Assistant AI typically operates on a prompt-response model, where it processes u
 - **4. Deliver Output**
     The generated response is presented to the user.
 ---
-#### Advantages
+### Advantages
 
 - Excellent for content generation, summarization, and creative tasks.
 - Provides quick answers and information retrieval.
 - User-friendly, requiring direct prompts.
 - Can be integrated into various applications (chatbots, virtual assistants).
 
-#### Limitations
+### Limitations
 
 - **Requires Continuous Prompts:** It cannot take action or transition between tasks without a specific human prompt for each step.
 - **Predefined Capabilities Only:** Its actions are limited to fixed, built-in functions; it cannot independently decide to create new analysis or workflows outside its training boundaries.
@@ -193,4 +193,4 @@ The biggest difference between the two systems is the human's position in the op
 -   The Agent automatically calls the API to retrieve logs (Step: Act).
 -   It detects unusual activity from account X (Step: Decide).
 -   Instead of reporting to you, the Agent automatically activates a tool to call the Backend API to block account X, and simultaneously reconfigures the Firewall rules (Step: Act).
--   It re-checks the system to see if the spam has stopped (Step: Observe), finds it safe $\\rightarrow$ Sends you a single report: "Successfully handled 1 fraud incident from account X."`}],ge=`modulepreload`,_e=function(e){return`/blog-test-agent-skills/`+e},ve={},ye=function(e,t,n){let r=Promise.resolve();if(t&&t.length>0){let e=document.getElementsByTagName(`link`),i=document.querySelector(`meta[property=csp-nonce]`),a=i?.nonce||i?.getAttribute(`nonce`);function o(e){return Promise.all(e.map(e=>Promise.resolve(e).then(e=>({status:`fulfilled`,value:e}),e=>({status:`rejected`,reason:e}))))}r=o(t.map(t=>{if(t=_e(t,n),t in ve)return;ve[t]=!0;let r=t.endsWith(`.css`),i=r?`[rel="stylesheet"]`:``;if(n)for(let n=e.length-1;n>=0;n--){let i=e[n];if(i.href===t&&(!r||i.rel===`stylesheet`))return}else if(document.querySelector(`link[href="${t}"]${i}`))return;let o=document.createElement(`link`);if(o.rel=r?`stylesheet`:ge,r||(o.as=`script`),o.crossOrigin=``,o.href=t,a&&o.setAttribute(`nonce`,a),document.head.appendChild(o),r)return new Promise((e,n)=>{o.addEventListener(`load`,e),o.addEventListener(`error`,()=>n(Error(`Unable to preload CSS for ${t}`)))})}))}function i(e){let t=new Event(`vite:preloadError`,{cancelable:!0});if(t.payload=e,window.dispatchEvent(t),!t.defaultPrevented)throw e}return r.then(t=>{for(let e of t||[])e.status===`rejected`&&i(e.reason);return e().catch(i)})},be=(0,_.lazy)(()=>ye(()=>import(`./BlogDetail-CUr2T6r-.js`),[]));function xe(){let[e,t]=(0,_.useState)(null),n=he.find(t=>t.id===e);return(0,D.jsxs)(`div`,{className:`min-h-screen bg-gray-50 flex flex-col justify-between`,children:[(0,D.jsxs)(`div`,{className:`w-full`,children:[(0,D.jsx)(de,{}),(0,D.jsx)(`main`,{className:`container mx-auto px-4 py-12`,children:n?(0,D.jsx)(_.Suspense,{fallback:(0,D.jsx)(`div`,{className:`flex justify-center items-center min-h-[400px]`,children:(0,D.jsx)(`div`,{className:`animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600`})}),children:(0,D.jsx)(be,{post:n,onBack:()=>t(null)})}):(0,D.jsxs)(`div`,{className:`mb-12`,children:[(0,D.jsx)(`h2`,{className:`mb-8 text-3xl font-bold text-gray-900`,children:`Bài viết mới nhất`}),(0,D.jsx)(`div`,{className:`grid gap-8 md:grid-cols-2 lg:grid-cols-3`,children:he.map(e=>(0,D.jsx)(fe,{post:e,onSelectPost:t},e.id))})]})})]}),(0,D.jsx)(me,{})]})}(0,v.createRoot)(document.getElementById(`root`)).render((0,D.jsx)(_.StrictMode,{children:(0,D.jsx)(xe,{})}));export{u as a,w as i,oe as n,c as o,ie as r,E as t};
+-   It re-checks the system to see if the spam has stopped (Step: Observe), finds it safe $\\rightarrow$ Sends you a single report: "Successfully handled 1 fraud incident from account X."`}],ge=`modulepreload`,_e=function(e){return`/blog-test-agent-skills/`+e},ve={},ye=function(e,t,n){let r=Promise.resolve();if(t&&t.length>0){let e=document.getElementsByTagName(`link`),i=document.querySelector(`meta[property=csp-nonce]`),a=i?.nonce||i?.getAttribute(`nonce`);function o(e){return Promise.all(e.map(e=>Promise.resolve(e).then(e=>({status:`fulfilled`,value:e}),e=>({status:`rejected`,reason:e}))))}r=o(t.map(t=>{if(t=_e(t,n),t in ve)return;ve[t]=!0;let r=t.endsWith(`.css`),i=r?`[rel="stylesheet"]`:``;if(n)for(let n=e.length-1;n>=0;n--){let i=e[n];if(i.href===t&&(!r||i.rel===`stylesheet`))return}else if(document.querySelector(`link[href="${t}"]${i}`))return;let o=document.createElement(`link`);if(o.rel=r?`stylesheet`:ge,r||(o.as=`script`),o.crossOrigin=``,o.href=t,a&&o.setAttribute(`nonce`,a),document.head.appendChild(o),r)return new Promise((e,n)=>{o.addEventListener(`load`,e),o.addEventListener(`error`,()=>n(Error(`Unable to preload CSS for ${t}`)))})}))}function i(e){let t=new Event(`vite:preloadError`,{cancelable:!0});if(t.payload=e,window.dispatchEvent(t),!t.defaultPrevented)throw e}return r.then(t=>{for(let e of t||[])e.status===`rejected`&&i(e.reason);return e().catch(i)})},be=(0,_.lazy)(()=>ye(()=>import(`./BlogDetail-Cq10cf5S.js`),[]));function xe(){let[e,t]=(0,_.useState)(null),n=he.find(t=>t.id===e);return(0,D.jsxs)(`div`,{className:`min-h-screen bg-gray-50 flex flex-col justify-between`,children:[(0,D.jsxs)(`div`,{className:`w-full`,children:[(0,D.jsx)(de,{}),(0,D.jsx)(`main`,{className:`container mx-auto px-4 py-12`,children:n?(0,D.jsx)(_.Suspense,{fallback:(0,D.jsx)(`div`,{className:`flex justify-center items-center min-h-[400px]`,children:(0,D.jsx)(`div`,{className:`animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600`})}),children:(0,D.jsx)(be,{post:n,onBack:()=>t(null)})}):(0,D.jsxs)(`div`,{className:`mb-12`,children:[(0,D.jsx)(`h2`,{className:`mb-8 text-3xl font-bold text-gray-900`,children:`Bài viết mới nhất`}),(0,D.jsx)(`div`,{className:`grid gap-8 md:grid-cols-2 lg:grid-cols-3`,children:he.map(e=>(0,D.jsx)(fe,{post:e,onSelectPost:t},e.id))})]})})]}),(0,D.jsx)(me,{})]})}(0,v.createRoot)(document.getElementById(`root`)).render((0,D.jsx)(_.StrictMode,{children:(0,D.jsx)(xe,{})}));export{u as a,w as i,oe as n,c as o,ie as r,E as t};
