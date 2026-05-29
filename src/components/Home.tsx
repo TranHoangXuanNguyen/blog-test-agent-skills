@@ -1,7 +1,7 @@
 import { ArrowRight, BookOpen, Cpu, Sparkles } from 'lucide-react';
 import { posts } from '../data/posts';
 import BlogCard from './BlogCard';
-import DevDashboard from './DevDashboard';
+import DevFortune from './DevFortune';
 
 interface HomeProps {
   onNavigate: (view: 'home' | 'posts' | 'about' | 'contact') => void;
@@ -42,7 +42,7 @@ export default function Home({ onNavigate, onSelectPost }: HomeProps) {
           </h1>
           
           <p className="text-base md:text-lg text-gray-650 dark:text-gray-400 leading-relaxed max-w-2xl">
-            Chào mừng bạn đến với blog cá nhân của tôi. Nơi chia sẻ các bài viết chuyên sâu về phát triển ứng dụng Web hiện đại (React, TypeScript, Next.js) và các giải pháp đột phá trong tích hợp tác nhân thông minh (Agentic AI, Model Context Protocol) vào quy trình coding hàng ngày.
+            Chào mừng bạn đến với blog của chúng tôi. Nơi chia sẻ các bài viết chuyên sâu về phát triển ứng dụng Web hiện đại (React, TypeScript, Next.js) và các giải pháp đột phá trong tích hợp tác nhân thông minh (Agentic AI, Model Context Protocol) vào quy trình coding hàng ngày.
           </p>
 
           <div className="flex flex-wrap gap-4 pt-4">
@@ -57,7 +57,7 @@ export default function Home({ onNavigate, onSelectPost }: HomeProps) {
               onClick={() => onNavigate('about')}
               className="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/60 px-6 py-3.5 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all cursor-pointer active:scale-98"
             >
-              Tìm hiểu về tôi
+              Tìm hiểu về chúng tôi
             </button>
           </div>
         </div>
@@ -65,7 +65,7 @@ export default function Home({ onNavigate, onSelectPost }: HomeProps) {
 
       {/* Interactive AI Agent Playground Section */}
       <section className="relative z-10">
-        <DevDashboard />
+        <DevFortune />
       </section>
 
       {/* Why This Blog Section */}

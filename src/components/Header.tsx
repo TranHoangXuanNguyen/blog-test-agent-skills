@@ -20,7 +20,7 @@ const Header = ({ currentView, onNavigate, theme, onToggleTheme, onSearchOpen }:
   const navLinks = [
     { name: 'Trang chủ', view: 'home' as const },
     { name: 'Bài viết', view: 'posts' as const },
-    { name: 'Về tôi', view: 'about' as const },
+    { name: 'Về chúng tôi', view: 'about' as const },
     { name: 'Liên hệ', view: 'contact' as const },
   ];
 

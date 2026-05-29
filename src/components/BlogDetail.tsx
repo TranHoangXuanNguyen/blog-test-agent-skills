@@ -316,18 +316,30 @@ export default function BlogDetail({ post, onBack }: BlogDetailProps) {
             {/* Quick Profile Summary in sidebar */}
             <div className="rounded-2xl border border-gray-150/80 dark:border-slate-800/85 bg-white/70 dark:bg-slate-900/60 backdrop-blur-sm p-5 shadow-sm text-left space-y-3.5">
               <div className="flex items-center gap-3">
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
-                  alt="Trần Hoàng Xuân Nguyên"
-                  className="h-10 w-10 rounded-full object-cover border border-indigo-100 dark:border-indigo-900"
-                />
+                <div className="flex -space-x-2.5 overflow-hidden">
+                  <img
+                    className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover"
+                    src="https://api.dicebear.com/7.x/adventurer/svg?seed=Oliver"
+                    alt="Võ Đức Tài"
+                  />
+                  <img
+                    className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover"
+                    src="https://api.dicebear.com/7.x/adventurer/svg?seed=Jack"
+                    alt="Lê Kỳ Bá"
+                  />
+                  <img
+                    className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-slate-900 object-cover"
+                    src="https://api.dicebear.com/7.x/adventurer/svg?seed=Sam"
+                    alt="Trần Hoàng Xuân Nguyên"
+                  />
+                </div>
                 <div>
                   <h5 className="text-xs font-bold text-gray-900 dark:text-white">Tác giả</h5>
-                  <p className="text-[10px] text-gray-400 font-semibold">T.H.X Nguyên</p>
+                  <p className="text-[10px] text-gray-400 font-semibold">Tài, Bá, Nguyên</p>
                 </div>
               </div>
               <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
-                Đam mê xây dựng web hiện đại, viết mã tối ưu SEO và khám phá các AI Agents trong kỹ nghệ phần mềm.
+                Đội ngũ kỹ sư đam mê xây dựng web hiện đại, tối ưu SEO và tích hợp AI Agents vào lập trình thực chiến.
               </p>
             </div>
 
