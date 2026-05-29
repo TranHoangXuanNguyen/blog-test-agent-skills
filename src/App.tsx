@@ -3,18 +3,29 @@ import Header from './components/Header'
 import BlogCard from './components/BlogCard'
 import Footer from './components/Footer'
 import SearchPalette from './components/SearchPalette'
-import { posts } from './data/posts'
+import { posts as staticPosts, type Post } from './data/posts'
+import { getAllPosts } from './services/postService'
 
 const BlogDetail = lazy(() => import('./components/BlogDetail'))
 const About = lazy(() => import('./components/About'))
 const Contact = lazy(() => import('./components/Contact'))
 const Home = lazy(() => import('./components/Home'))
+const AdminPanel = lazy(() => import('./components/AdminPanel'))
 
 function App() {
-  const [currentView, setCurrentView] = useState<'home' | 'posts' | 'about' | 'contact'>('home')
+  const [currentView, setCurrentView] = useState<'home' | 'posts' | 'about' | 'contact' | 'admin'>('home')
+  const [allPosts, setAllPosts] = useState<Post[]>(staticPosts)
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string>('Tất cả')
+  
+  // Load posts dynamically
+  useEffect(() => {
+    getAllPosts().then(data => {
+      setAllPosts(data)
+    })
+  }, [currentView])
+
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme') as 'light' | 'dark'
@@ -37,7 +48,7 @@ function App() {
     localStorage.setItem('theme', theme)
   }, [theme])
   
-  const selectedPost = posts.find((p) => p.id === selectedPostId)
+  const selectedPost = allPosts.find((p) => p.id === selectedPostId)
 
   const [scrollProgress, setScrollProgress] = useState(0)
 
@@ -74,16 +85,16 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  const handleNavigate = (view: 'home' | 'posts' | 'about' | 'contact') => {
+  const handleNavigate = (view: 'home' | 'posts' | 'about' | 'contact' | 'admin') => {
     setCurrentView(view)
     setSelectedPostId(null)
   }
 
-  const categories = ['Tất cả', ...Array.from(new Set(posts.map(p => p.category)))]
+  const categories = ['Tất cả', ...Array.from(new Set(allPosts.map(p => p.category)))]
 
   const filteredPosts = activeCategory === 'Tất cả'
-    ? posts
-    : posts.filter(p => p.category === activeCategory)
+    ? allPosts
+    : allPosts.filter(p => p.category === activeCategory)
 
   const renderContent = () => {
     const loadingSpinner = (
@@ -122,6 +133,14 @@ function App() {
       )
     }
 
+    if (currentView === 'admin') {
+      return (
+        <Suspense fallback={loadingSpinner}>
+          <AdminPanel />
+        </Suspense>
+      )
+    }
+
     // Default 'posts' view containing grid and details
     if (selectedPost) {
       return (
@@ -142,7 +161,7 @@ function App() {
         {/* Category Tabs */}
         <div className="flex flex-wrap gap-2 pb-2 border-b border-gray-100 dark:border-gray-900">
           {categories.map((cat) => {
-            const count = cat === 'Tất cả' ? posts.length : posts.filter(p => p.category === cat).length
+            const count = cat === 'Tất cả' ? allPosts.length : allPosts.filter(p => p.category === cat).length
             const active = activeCategory === cat
             return (
               <button
@@ -208,7 +227,7 @@ function App() {
         </main>
       </div>
 
-      <Footer />
+      <Footer onNavigate={handleNavigate} />
 
       {/* Global Command Palette Search */}
       <SearchPalette 
@@ -218,6 +237,7 @@ function App() {
           setSelectedPostId(id)
           setCurrentView('posts')
         }}
+        posts={allPosts}
       />
     </div>
   )

@@ -11,3 +11,4 @@ Danh sách tác phẩm/bài viết được bảo hộ tác quyền:
 - [28 Th5, 2026] Bài viết ID 8: "Hướng dẫn Deploy React lên GitHub Pages" (Chuyên mục: Performance) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
 - [28 Th5, 2026] Bài viết ID 9: "Top 7 Featured DEV Posts of the Week" (Chuyên mục: Top7) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
 - [28 Th5, 2026] Bài viết ID 10: "How the 80/20 Rule and GitHub Copilot Saved My Abandoned App From Code Graveyard" (Chuyên mục: Devchallenge) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.
+- [28 Th5, 2026] Bài viết ID 11: "Gen AI vs AI Agents vs Agentic AI" (Chuyên mục: AI & Technology) - Tác quyền sở hữu bởi Tran Hoang Xuan Nguyen.

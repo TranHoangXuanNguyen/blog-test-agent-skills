@@ -52,7 +52,11 @@ const Linkedin = ({ size = 20 }: { size?: number }) => (
   </svg>
 );
 
-const Footer = () => {
+interface FooterProps {
+  onNavigate?: (view: 'home' | 'posts' | 'about' | 'contact' | 'admin') => void;
+}
+
+const Footer = ({ onNavigate }: FooterProps) => {
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -195,6 +199,15 @@ const Footer = () => {
           <div className="flex gap-6 text-xs text-gray-455 dark:text-gray-500">
             <a href="#" className="hover:text-indigo-650 dark:hover:text-indigo-400">Điều khoản dịch vụ</a>
             <a href="#" className="hover:text-indigo-650 dark:hover:text-indigo-400">Chính sách Cookie</a>
+            {onNavigate && (
+              <a 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); onNavigate('admin'); }} 
+                className="hover:text-indigo-650 dark:hover:text-indigo-400"
+              >
+                Quản trị
+              </a>
+            )}
           </div>
         </div>
       </div>

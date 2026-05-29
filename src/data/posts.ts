@@ -14,6 +14,7 @@ import HcNextjs14tontpContent from '../blogs/Học Next.js 14 toàn tập.md?raw
 import HngdnDeployReactlnGitHubPagesContent from '../blogs/Hướng dẫn Deploy React lên GitHub Pages.md?raw';
 import Top7FeaturedDEVPostsoftheWeekContent from '../blogs/Top 7 Featured DEV Posts of the Week.md?raw';
 import Howthe8020RuleandGitHubCopilotSavedMyAbandonedAppFromCodeGraveyardContent from '../blogs/How the 80-20 Rule and GitHub Copilot Saved My Abandoned App From Code Graveyard.md?raw';
+import GenAIvsAIAgentsvsAgenticAIContent from '../blogs/Gen AI vs AI Agents vs Agentic AI.md?raw';
 export interface Post {
   id: number;
   title: string;
@@ -23,10 +24,22 @@ export interface Post {
   imageUrl: string;
   category: string;
   content: string;
+  views_count?: number;
+  likes_count?: number;
 }
 
 export const posts: Post[] = [
-                  {
+                    {
+    id: 11,
+    title: "Gen AI vs AI Agents vs Agentic AI",
+    excerpt: "Artificial Intelligence has evolved from simple rule-based systems to models that can create, reason and act independently.",
+    date: "28 Th5, 2026",
+    readTime: "8 phút đọc",
+    imageUrl: "https://media.geeksforgeeks.org/wp-content/uploads/20251208144319106399/generative_al_with_only_llm2.webp",
+    category: "AI & Technology",
+    content: GenAIvsAIAgentsvsAgenticAIContent,
+  },
+  {
     id: 10,
     title: "How the 80/20 Rule and GitHub Copilot Saved My Abandoned App From Code Graveyard",
     excerpt: "This is a submission for the GitHub Finish-Up-A-Thon Challenge           What I Built   AlkaFocus is...",
@@ -126,6 +139,7 @@ export const posts: Post[] = [
     category: "AI & Technology",
     content: agenticContent,
   }
+
 
 
 

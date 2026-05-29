@@ -3,10 +3,12 @@
  * Bản quyền thuộc về dự án MyBlog. Vui lòng không sao chép trái phép.
  */
 
-import { ArrowLeft, Calendar, Clock, User, Copy, Check } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User, Copy, Check, Eye, Heart } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import type { Post } from '../data/posts';
 import MarkdownRenderer from './MarkdownRenderer';
+import { incrementPostViews, incrementPostLikes } from '../services/postService';
+import CommentsSection from './CommentsSection';
 
 interface BlogDetailProps {
   post: Post;
@@ -50,6 +52,24 @@ const slugify = (text: string) => {
 export default function BlogDetail({ post, onBack }: BlogDetailProps) {
   const [copied, setCopied] = useState(false);
   const [activeId, setActiveId] = useState('');
+  const [likes, setLikes] = useState(post.likes_count || 0);
+  const [localViews, setLocalViews] = useState(post.views_count || 0);
+
+  useEffect(() => {
+    // Tự động gọi RPC tăng lượt xem khi truy cập chi tiết
+    incrementPostViews(post.id).then(() => {
+      setLocalViews(prev => prev + 1);
+    });
+  }, [post.id]);
+
+  const handleLike = async () => {
+    try {
+      await incrementPostLikes(post.id);
+      setLikes(prev => prev + 1);
+    } catch (err) {
+      console.error('Failed to like post:', err);
+    }
+  };
 
   // Tự động phân tích mục lục bài viết từ content markdown (Derived state during render)
   const lines = post.content.split('\n');
@@ -174,7 +194,8 @@ export default function BlogDetail({ post, onBack }: BlogDetailProps) {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         
         {/* Left Column: Post Content (Col 1-3) */}
-        <div className="lg:col-span-3 bg-white dark:bg-slate-900 rounded-3xl border border-gray-100/60 dark:border-slate-800/50 shadow-md p-6 md:p-12 text-left">
+        <div className="lg:col-span-3 space-y-8">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-gray-100/60 dark:border-slate-800/50 shadow-md p-6 md:p-12 text-left">
           
           {/* Metadata Banner */}
           <div className="flex flex-wrap items-center gap-6 border-b border-gray-100 dark:border-slate-800/80 pb-6 mb-8 text-sm text-gray-500 dark:text-gray-400">
@@ -190,6 +211,18 @@ export default function BlogDetail({ post, onBack }: BlogDetailProps) {
               <Clock size={16} className="text-indigo-500" />
               {post.readTime}
             </span>
+            {localViews > 0 && (
+              <span className="flex items-center gap-2">
+                <Eye size={16} className="text-indigo-500" />
+                {localViews} lượt xem
+              </span>
+            )}
+            {likes > 0 && (
+              <span className="flex items-center gap-2">
+                <Heart size={16} className="text-rose-500 fill-rose-500/10" />
+                {likes} lượt thích
+              </span>
+            )}
           </div>
 
           {/* Render Article content */}
@@ -197,6 +230,10 @@ export default function BlogDetail({ post, onBack }: BlogDetailProps) {
             <MarkdownRenderer content={post.content} />
           </section>
         </div>
+
+        {/* Comments Section */}
+        <CommentsSection postId={post.id} />
+      </div>
 
         {/* Right Column: Floating Sidebar (Col 4) */}
         <div className="lg:col-span-1 space-y-6">
@@ -260,6 +297,20 @@ export default function BlogDetail({ post, onBack }: BlogDetailProps) {
                   <TwitterIcon size={14} />
                 </a>
               </div>
+            </div>
+
+            {/* Like & Reaction Card */}
+            <div className="rounded-2xl border border-gray-150/80 dark:border-slate-800/85 bg-white/70 dark:bg-slate-900/60 backdrop-blur-sm p-5 shadow-sm space-y-4 text-left">
+              <h4 className="text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-white pb-2 border-b border-gray-100 dark:border-slate-800">
+                Yêu thích bài viết
+              </h4>
+              <button
+                onClick={handleLike}
+                className="w-full flex items-center justify-center gap-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-950/40 border border-rose-200/30 dark:border-rose-900/30 py-3 text-sm font-bold text-rose-600 dark:text-rose-400 hover:scale-102 active:scale-98 transition-all cursor-pointer"
+              >
+                <Heart size={16} className="fill-rose-600 text-rose-600 dark:fill-rose-400 dark:text-rose-400 animate-pulse" />
+                Thả tim ({likes})
+              </button>
             </div>
 
             {/* Quick Profile Summary in sidebar */}

@@ -1,4 +1,4 @@
-import { Calendar, Clock, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, Eye, Heart } from 'lucide-react';
 import type { Post } from '../data/posts';
 
 interface BlogCardProps {
@@ -49,7 +49,7 @@ const BlogCard = ({ post, onSelectPost }: BlogCardProps) => {
 
         {/* Meta Info */}
         <div className="mt-auto flex items-center justify-between border-t border-gray-100 dark:border-slate-800/80 pt-4 text-xs text-gray-400 dark:text-gray-500">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span className="flex items-center gap-1">
               <Calendar size={13} />
               {post.date}
@@ -58,6 +58,18 @@ const BlogCard = ({ post, onSelectPost }: BlogCardProps) => {
               <Clock size={13} />
               {post.readTime}
             </span>
+            {post.views_count !== undefined && post.views_count > 0 ? (
+              <span className="flex items-center gap-1">
+                <Eye size={13} />
+                {post.views_count}
+              </span>
+            ) : null}
+            {post.likes_count !== undefined && post.likes_count > 0 ? (
+              <span className="flex items-center gap-1">
+                <Heart size={13} className="fill-rose-500/10 text-rose-500" />
+                {post.likes_count}
+              </span>
+            ) : null}
           </div>
           
           <span className="flex items-center gap-1 font-bold text-indigo-650 dark:text-indigo-400 group-hover:text-indigo-755 dark:group-hover:text-indigo-300 transition-colors">

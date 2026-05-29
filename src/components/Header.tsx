@@ -7,8 +7,8 @@ import { useState } from 'react';
 import { Menu, Search, X, Sun, Moon } from 'lucide-react';
 
 interface HeaderProps {
-  currentView: 'home' | 'posts' | 'about' | 'contact';
-  onNavigate: (view: 'home' | 'posts' | 'about' | 'contact') => void;
+  currentView: 'home' | 'posts' | 'about' | 'contact' | 'admin';
+  onNavigate: (view: 'home' | 'posts' | 'about' | 'contact' | 'admin') => void;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
   onSearchOpen: () => void;
@@ -24,7 +24,7 @@ const Header = ({ currentView, onNavigate, theme, onToggleTheme, onSearchOpen }:
     { name: 'Liên hệ', view: 'contact' as const },
   ];
 
-  const handleLinkClick = (e: React.MouseEvent, view: 'home' | 'posts' | 'about' | 'contact') => {
+  const handleLinkClick = (e: React.MouseEvent, view: 'home' | 'posts' | 'about' | 'contact' | 'admin') => {
     e.preventDefault();
     onNavigate(view);
   };

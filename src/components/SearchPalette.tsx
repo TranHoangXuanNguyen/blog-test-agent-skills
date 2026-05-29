@@ -5,15 +5,16 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Search, X, Calendar, Clock, ArrowRight } from 'lucide-react';
-import { posts } from '../data/posts';
+import type { Post } from '../data/posts';
 
 interface SearchPaletteProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectPost: (id: number) => void;
+  posts: Post[];
 }
 
-export default function SearchPalette({ isOpen, onClose, onSelectPost }: SearchPaletteProps) {
+export default function SearchPalette({ isOpen, onClose, onSelectPost, posts }: SearchPaletteProps) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   
