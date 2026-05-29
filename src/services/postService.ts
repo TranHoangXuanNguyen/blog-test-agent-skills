@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabaseClient';
 import { posts as staticPosts, type Post } from '../data/posts';
+import { preprocessObsidian } from '../lib/obsidianPreprocess';
 export type { Post };
 export async function getAllPosts(): Promise<Post[]> {
   try {
@@ -21,14 +22,17 @@ export async function getAllPosts(): Promise<Post[]> {
       readTime: p.readTime,
       imageUrl: p.imageUrl,
       category: p.category,
-      content: p.content,
+      content: preprocessObsidian(p.content || ''),
       views_count: Number(p.views_count || 0),
       likes_count: Number(p.likes_count || 0),
     }));
 
     // Merge static posts and Supabase posts
     // Filter duplicates by title
-    const allPosts = [...dbPosts, ...staticPosts];
+    // Ensure static posts also get preprocessed (they may contain Obsidian wikilinks)
+    const processedStatic = staticPosts.map(sp => ({ ...sp, content: preprocessObsidian(sp.content || '') }));
+
+    const allPosts = [...dbPosts, ...processedStatic];
     const uniquePosts = allPosts.filter(
       (post, index, self) =>
         index === self.findIndex((p) => p.title.trim().toLowerCase() === post.title.trim().toLowerCase())

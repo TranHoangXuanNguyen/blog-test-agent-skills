@@ -201,7 +201,7 @@ export default function BlogDetail({ post, onBack }: BlogDetailProps) {
           <div className="flex flex-wrap items-center gap-6 border-b border-gray-100 dark:border-slate-800/80 pb-6 mb-8 text-sm text-gray-500 dark:text-gray-400">
             <span className="flex items-center gap-2">
               <User size={16} className="text-indigo-500" />
-              Tran Hoang Xuan Nguyen
+              {post.author}
             </span>
             <span className="flex items-center gap-2">
               <Calendar size={16} className="text-indigo-500" />

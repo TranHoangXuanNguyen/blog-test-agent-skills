@@ -3,11 +3,6 @@
 Is an AI framework that improves LLMs by fetching facts from an external, authoritative knowledge base instead of using the training data.
 ```
 
-## Brief summary (For beginners)
-```
-RAG combines a language model with an external knowledge source (documents, databases) to fetch accurate information before generating an answer. Simply put: instead of relying only on the model's memory, the AI looks up a "reference book" to ensure correctness and freshness.
-```
-
 > [!NOTE] Why this matters?
 > Allows the AI to provide highly accurate, up-to-date, and context-specific answers without requiring a costly and time-consuming model retraining process.
 

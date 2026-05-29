@@ -4,6 +4,8 @@
  */
 
 import React, { useState } from 'react';
+import { preprocessObsidian } from '../lib/obsidianPreprocess';
+import assetsMap from '../lib/assetsMap';
 import { Check, Copy } from 'lucide-react';
 
 interface CodeBlockProps {
@@ -55,9 +57,35 @@ const CodeBlock = ({ code, language }: CodeBlockProps) => {
           )}
         </button>
       </div>
-      <pre className="p-4 overflow-x-auto font-mono text-sm text-slate-200 bg-slate-900 leading-relaxed select-text">
-        <code>{code}</code>
-      </pre>
+      {/* If the fenced block looks like prose (short paragraph), render as wrapped text instead of code */}
+      {(() => {
+        const txt = String(code || '').trim();
+        const lines = txt.split('\n');
+        const codeTokens = ['{', '}', ';', '=>', 'function', 'const ', 'let ', 'var ', '<', '</', 'import ', 'export ', 'class ', 'console.', 'return '];
+        let isLikelyProse = false;
+        if (txt.length > 0) {
+          const hasCodeToken = codeTokens.some(t => txt.includes(t));
+          if (!hasCodeToken && lines.length <= 3) {
+            // if contains sentence punctuation or is reasonably long prose, treat as text
+            if (/[\.\!?]/.test(txt) && /\s/.test(txt)) isLikelyProse = true;
+            if (!isLikelyProse && txt.length > 80 && /\s/.test(txt)) isLikelyProse = true;
+          }
+        }
+
+        if (isLikelyProse) {
+          return (
+            <div className="p-4 text-sm text-slate-200 bg-slate-900 leading-relaxed select-text whitespace-pre-wrap break-words">
+              {txt}
+            </div>
+          );
+        }
+
+        return (
+          <pre className="p-4 overflow-x-auto font-mono text-sm text-slate-200 bg-slate-900 leading-relaxed select-text">
+            <code>{code}</code>
+          </pre>
+        );
+      })()}
     </div>
   );
 };
@@ -67,7 +95,34 @@ interface MarkdownRendererProps {
 }
 
 export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
-  const lines = content.split('\n');
+  // Preprocess Obsidian-style markdown (wikilinks, inline styles) and extract footnotes
+  const pre = preprocessObsidian(content || '');
+
+  // Extract footnote definitions of the form "[^id]: text" (support simple multi-line indented continuations)
+  const footnotes: { id: string; text: string }[] = [];
+  const contentLines = pre.split('\n');
+  const mainLines: string[] = [];
+  let idx = 0;
+  while (idx < contentLines.length) {
+    const line = contentLines[idx];
+    const m = line.match(/^\[\^([^\]]+)\]:\s*(.*)$/);
+    if (m) {
+      const id = m[1];
+      let text = m[2] || '';
+      idx++;
+      // capture indented continuation lines
+      while (idx < contentLines.length && /^\s{2,}\S/.test(contentLines[idx])) {
+        text += '\n' + contentLines[idx].replace(/^\s{2,}/, '');
+        idx++;
+      }
+      footnotes.push({ id, text: text.trim() });
+      continue;
+    }
+    mainLines.push(line);
+    idx++;
+  }
+
+  const lines = mainLines.join('\n').split('\n');
   const elements: React.ReactNode[] = [];
   
   let currentKey = 0;
@@ -92,10 +147,15 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
     const imgMatch = [...text.matchAll(imgRegex)];
     if (imgMatch.length > 0) {
       const [, alt, url] = imgMatch[0];
+      // Resolve local asset filenames (e.g. /assets/img.png or img.png) to Vite-built URLs
+      let resolvedUrl = url;
+      const basename = url.split('/').pop() || url;
+      if (assetsMap[basename]) resolvedUrl = assetsMap[basename];
+
       return (
         <span key={nextKey()} className="block my-6">
           <img
-            src={url}
+            src={resolvedUrl}
             alt={alt}
             className="w-full h-auto max-h-[450px] object-cover rounded-2xl shadow-md border border-gray-100 dark:border-gray-800"
             loading="lazy"
@@ -113,7 +173,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
     const tokens: React.ReactNode[] = [];
     let lastIndex = 0;
     
-    const inlineRegex = /(\*\*.*?\*\*|\[.*?\]\(.*?\)|`.*?`)/g;
+    const inlineRegex = /(\*\*.*?\*\*|==.*?==|\*[^*].*?\*|\[\^[^\]]+\]|\[.*?\]\(.*?\)|`.*?`)/g;
     const matches = [...text.matchAll(inlineRegex)];
 
     if (matches.length === 0) {
@@ -134,6 +194,14 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
           <strong key={`bold-${idx}`} className="font-bold text-gray-950 dark:text-white">
             {boldContent}
           </strong>
+        );
+      } else if (/^\[\^[^\]]+\]$/.test(matchText)) {
+        // footnote reference like [^1]
+        const fid = matchText.slice(2, -1);
+        tokens.push(
+          <sup key={`fnref-${idx}`} className="align-super text-xs">
+            <a id={`ref-${fid}`} href={`#fn-${fid}`} className="font-semibold text-indigo-600 dark:text-indigo-400">[{fid}]</a>
+          </sup>
         );
       } else if (matchText.startsWith('[') && matchText.includes('](')) {
         const closeBracketIdx = matchText.indexOf(']');
@@ -159,6 +227,18 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
           >
             {codeContent}
           </code>
+        );
+      }
+      else if (matchText.startsWith('==') && matchText.endsWith('==')) {
+        const inner = matchText.slice(2, -2);
+        tokens.push(
+          <mark key={`mark-${idx}`} className="bg-yellow-200 dark:bg-yellow-600 px-1 rounded">{inner}</mark>
+        );
+      }
+      else if (matchText.startsWith('*') && matchText.endsWith('*')) {
+        const inner = matchText.slice(1, -1);
+        tokens.push(
+          <em key={`em-${idx}`} className="italic">{inner}</em>
         );
       }
 
@@ -250,43 +330,51 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
       continue;
     }
 
-    // 4. Headings (Added ID slugs for Table of Contents scrolling)
-    if (trimmedLine.startsWith('## ')) {
-      const headingText = trimmedLine.slice(3);
+    // 4. Headings (supports # through ######, with ID slugs for TOC)
+    const headingMatch = trimmedLine.match(/^(#{1,6})\s+(.*)$/);
+    if (headingMatch) {
+      const level = headingMatch[1].length;
+      const headingText = headingMatch[2];
       const id = slugify(headingText);
-      elements.push(
-        <h2 
-          key={nextKey()} 
-          id={id}
-          className="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4 tracking-tight border-b border-gray-100 dark:border-slate-850 pb-2 scroll-mt-20"
-        >
-          {renderInline(headingText)}
-        </h2>
-      );
-      i++;
-      continue;
-    }
-    if (trimmedLine.startsWith('### ')) {
-      const headingText = trimmedLine.slice(4);
-      const id = slugify(headingText);
-      elements.push(
-        <h3 
-          key={nextKey()} 
-          id={id}
-          className="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-3 tracking-tight scroll-mt-20"
-        >
-          {renderInline(headingText)}
-        </h3>
-      );
-      i++;
-      continue;
-    }
-    if (trimmedLine.startsWith('#### ')) {
-      elements.push(
-        <h4 key={nextKey()} className="text-lg font-bold text-gray-800 dark:text-gray-205 mt-6 mb-2">
-          {renderInline(trimmedLine.slice(5))}
-        </h4>
-      );
+
+      if (level === 1) {
+        elements.push(
+          <h1 key={nextKey()} id={id} className="text-4xl font-extrabold text-gray-900 dark:text-white mt-12 mb-6 tracking-tight scroll-mt-20">
+            {renderInline(headingText)}
+          </h1>
+        );
+      } else if (level === 2) {
+        elements.push(
+          <h2 key={nextKey()} id={id} className="text-2xl font-bold text-gray-900 dark:text-white mt-10 mb-4 tracking-tight border-b border-gray-100 dark:border-slate-850 pb-2 scroll-mt-20">
+            {renderInline(headingText)}
+          </h2>
+        );
+      } else if (level === 3) {
+        elements.push(
+          <h3 key={nextKey()} id={id} className="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-3 tracking-tight scroll-mt-20">
+            {renderInline(headingText)}
+          </h3>
+        );
+      } else if (level === 4) {
+        elements.push(
+          <h4 key={nextKey()} className="text-lg font-bold text-gray-800 dark:text-gray-205 mt-6 mb-2">
+            {renderInline(headingText)}
+          </h4>
+        );
+      } else if (level === 5) {
+        elements.push(
+          <h5 key={nextKey()} className="text-base font-semibold text-gray-800 dark:text-gray-205 mt-5 mb-2">
+            {renderInline(headingText)}
+          </h5>
+        );
+      } else {
+        elements.push(
+          <h6 key={nextKey()} className="text-sm font-medium text-gray-700 dark:text-gray-400 mt-4 mb-1">
+            {renderInline(headingText)}
+          </h6>
+        );
+      }
+
       i++;
       continue;
     }
@@ -302,11 +390,76 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
         quoteLines.push(quoteLine);
         i++;
       }
-      const quoteText = quoteLines.join('\n');
+
+      // Parse inner lines to allow lists and paragraphs inside blockquote
+      const innerElements: React.ReactNode[] = [];
+      let qidx = 0;
+
+      // If first line is a callout label like "**Note:** ...", render it as bold prefix
+      if (quoteLines.length > 0) {
+        const m = quoteLines[0].match(/^\s*\*\*(.+?):\*\*\s*(.*)$/);
+        if (m) {
+          const label = m[1];
+          const rest = m[2];
+          innerElements.push(
+            <p key={`${nextKey()}-label`} className="font-bold mb-2">
+              <strong>{label}:</strong> {rest ? renderInline(rest) : null}
+            </p>
+          );
+          qidx = 1;
+        }
+      }
+
+      while (qidx < quoteLines.length) {
+        const qline = quoteLines[qidx];
+        // unordered list
+        if (qline.startsWith('- ') || qline.startsWith('* ')) {
+          const items: string[] = [];
+          while (qidx < quoteLines.length && (quoteLines[qidx].startsWith('- ') || quoteLines[qidx].startsWith('* '))) {
+            items.push(quoteLines[qidx].slice(2));
+            qidx++;
+          }
+          innerElements.push(
+            <ul key={`${nextKey()}-ul`} className="list-disc pl-5 space-y-1">
+              {items.map((it, idx) => (
+                <li key={`q-li-${idx}`}>{renderInline(it)}</li>
+              ))}
+            </ul>
+          );
+          continue;
+        }
+
+        // ordered list
+        if (/^\d+\.\s/.test(qline)) {
+          const items: string[] = [];
+          while (qidx < quoteLines.length && /^\d+\.\s/.test(quoteLines[qidx])) {
+            const dotIndex = quoteLines[qidx].indexOf('.');
+            items.push(quoteLines[qidx].slice(dotIndex + 1).trim());
+            qidx++;
+          }
+          innerElements.push(
+            <ol key={`${nextKey()}-ol`} className="list-decimal pl-5 space-y-1">
+              {items.map((it, idx) => (
+                <li key={`q-oli-${idx}`}>{renderInline(it)}</li>
+              ))}
+            </ol>
+          );
+          continue;
+        }
+
+        // plain paragraph line
+        innerElements.push(
+          <p key={`${nextKey()}-p`} className="mb-2 leading-relaxed">
+            {renderInline(qline)}
+          </p>
+        );
+        qidx++;
+      }
+
       elements.push(
         <section key={nextKey()} className="my-6">
           <blockquote className="border-l-4 border-indigo-650 bg-indigo-50/20 dark:bg-indigo-950/10 px-6 py-4.5 rounded-r-2xl italic text-gray-800 dark:text-gray-300 leading-relaxed">
-            {renderInline(quoteText)}
+            {innerElements}
           </blockquote>
         </section>
       );
@@ -370,6 +523,23 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
       </p>
     );
     i++;
+  }
+  // Append footnotes section if any
+  if (footnotes.length > 0) {
+    elements.push(<hr key={nextKey()} className="my-8 border-t border-gray-150 dark:border-slate-850" />);
+    elements.push(
+      <section key={nextKey()} className="text-sm text-gray-700 dark:text-gray-300"> 
+        <h4 className="font-semibold mb-3">Footnotes</h4>
+        <ol className="list-decimal pl-6 space-y-2">
+          {footnotes.map((fn) => (
+            <li key={`fn-${fn.id}`} id={`fn-${fn.id}`} className="leading-relaxed">
+              {renderInline(fn.text)}{' '}
+              <a href={`#ref-${fn.id}`} className="ml-2 text-indigo-600 dark:text-indigo-400">↩</a>
+            </li>
+          ))}
+        </ol>
+      </section>
+    );
   }
 
   return <div className="markdown-body select-text">{elements}</div>;
